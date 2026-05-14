@@ -1,12 +1,11 @@
 import { googleLoginMutation } from "@/api/api";
 import { AUTH_REDIRECT_URL, queryKeys } from "@/api/axios";
-import type { GoogleAuthResponseType } from "@/api/types";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "./Loader";
+import { handleApiError } from "@/lib/handleApiError";
 
 export default function GoogleOAuth({
   setOpen,
@@ -27,14 +26,7 @@ export default function GoogleOAuth({
           setOpen(false);
           navigate(AUTH_REDIRECT_URL);
         },
-        onError: (err) => {
-          if (axios.isAxiosError(err)) {
-            const error = err as AxiosError<GoogleAuthResponseType>;
-            toast.error(error.response?.data.message || "Something went wrong");
-          } else {
-            toast.error("Google Auth Failed");
-          }
-        },
+        onError: (err) => handleApiError(err, "Google Auth Failed"),
       }),
     onError: () => {
       toast.error("Google Auth Failed");

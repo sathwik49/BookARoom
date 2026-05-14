@@ -1,7 +1,7 @@
 import { CookieOptions, Response } from "express";
 import appConfig from "../config/appConfig";
 
-const cookieConfig: CookieOptions = {
+export const cookieConfig: CookieOptions = {
   maxAge: 7 * 24 * 60 * 60 * 1000,
   httpOnly: true,
   secure: appConfig.NODE_ENV === "prod",

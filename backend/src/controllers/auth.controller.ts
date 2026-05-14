@@ -4,7 +4,8 @@ import { ValidationError } from "../utils/error";
 import { googleLoginService } from "../services/auth.service";
 import { ApiResponse } from "../utils/ApiResponse";
 import httpStatusCodes from "../constants/httpCodes";
-import { setCookies } from "../utils/setCookies";
+import { cookieConfig, setCookies } from "../utils/setCookies";
+import appConfig from "../config/appConfig";
 
 export const googleLoginController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -18,6 +19,13 @@ export const googleLoginController = asyncHandler(
     setCookies(res, result.jwtToken);
 
     return ApiResponse.ok(res, null, "Successfull", httpStatusCodes.OK, null);
+  },
+);
+
+export const logOutController = asyncHandler(
+  async (req: Request, res: Response) => {
+    res.clearCookie(appConfig.JWT_COOKIE_NAME, cookieConfig);
+    return ApiResponse.ok(res, null, "Logged out", httpStatusCodes.OK, null);
   },
 );
 
